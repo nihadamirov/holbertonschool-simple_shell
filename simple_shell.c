@@ -1,5 +1,10 @@
 #include "shell.h"
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 /**
  * custom_getline - Reads a line from the standard input.
@@ -12,7 +17,13 @@
  */
 ssize_t custom_getline(char **lineptr, size_t *n)
 {
-	return (getline(lineptr, n, stdin));
+	ssize_t read_bytes = getline(lineptr, n, stdin);
+
+	if (read_bytes == (-1))
+	{
+		perror("getline");
+	}
+	return (read_bytes);
 }
 
 /**
@@ -23,31 +34,32 @@ ssize_t custom_getline(char **lineptr, size_t *n)
  */
 void execute_command(char *command)
 {
-	pid_t pid;
-	int status;
-	char *argv[2];
+    pid_t pid;
+    int status;
+    char *argv[2];
 
-	argv[0] = command;
-	argv[1] = NULL;
+    argv[0] = command;
+    argv[1] = NULL;
 
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("Fork failed");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
-	{
-		char *envp[] = {NULL};
-
-		if (execve(command, argv, envp) == -1)
-		{
-			perror("Error");
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-	{
-		wait(&status);
-	}
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("Fork failed");
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0)
+    {
+        char *envp[] = {NULL};
+ 	
+	if (execvp(command, argv) == -1)
+        {
+            perror(command);
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        wait(&status);
+    }
 }
+
