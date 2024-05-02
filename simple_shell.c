@@ -36,10 +36,27 @@ void execute_command(char *command)
 {
     pid_t pid;
     int status;
-    char *argv[2];
+    char **argv;
+    char *token;
+    int i;
 
-    argv[0] = command;
-    argv[1] = NULL;
+    token = strtok(command," ");
+
+    argv = malloc(sizeof(char *) * 1024);
+
+    i = 0;
+
+    while (token)
+
+    {
+      argv[i] = token;
+      token = strtok(NULL, " ");
+      i++;
+
+    }
+
+    argv[i] = NULL;
+
 
     pid = fork();
     if (pid == -1)
@@ -51,7 +68,7 @@ void execute_command(char *command)
     {
         char *envp[] = {NULL};
  	
-	if (execvp(command, argv) == -1)
+	if (execvp(argv[0], argv) == -1)
         {
             perror(command);
             exit(EXIT_FAILURE);
