@@ -65,9 +65,7 @@ void execute_command(char *command)
         exit(EXIT_FAILURE);
     }
     else if (pid == 0)
-    {
-        char *envp[] = {NULL};
- 	
+    {	
 	if (execvp(argv[0], argv) == -1)
         {
             perror(command);
