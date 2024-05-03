@@ -18,7 +18,6 @@ int main(void)
 	
 	while (1)
 	{
-        printf("($) ");
         characters = getline(&buffer, &bufsize, stdin);
         if (characters == -1)
         {
