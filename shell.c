@@ -2,33 +2,66 @@
 #include <stdio.h>
 
 /**
- * main - Entry point of the program.
+ * main - Runs shell.
  *
- * Description: This function serves as the entry point of the shell program.
- * It reads commands from the standard input, executes them, and prints the
- * results to the standard output.
- *
- * Return: Always returns 0 to indicate successful completion.
+ * Return: (hopefully) 0
  */
-int main(void)
+int main(__attribute__((unused)) int argc, char **argv, char **env)
 {
-	char *buffer = NULL;
-	size_t bufsize = 0;
-	ssize_t characters;
-	
-	while (1)
+	int status = 1;
+
+	size_t buffsize;
+	char *stdin_line;
+
+	while (status)
 	{
-        characters = getline(&buffer, &bufsize, stdin);
-        if (characters == -1)
-        {
-            break;
-        }
+		char **line_tokens = NULL;
+		int is_terminal;
+		int special_case;
 
-        buffer[strcspn(buffer, "\n")] = '\0';
+		buffsize = 100;
+		stdin_line = NULL;
 
-        execute_command(buffer);
-    }
-    free(buffer);
-    return 0;
+		is_terminal = isatty(0);
+		if (is_terminal)
+			write(1, "$ ", 2);
+
+		if (getline(&stdin_line, &buffsize, stdin) == -1)
+		{
+			free(stdin_line);
+			break;
+		}
+
+		line_tokens = str_tokens(stdin_line);
+		if (!line_tokens)
+		{
+			free(stdin_line);
+			break;
+		}
+
+		special_case = special_cases(line_tokens, argv[0], env);
+
+		/* exit */
+		if (special_case == 0)
+		{
+			free(stdin_line);
+			free(line_tokens);
+			return (EXIT_SUCCESS);
+		}
+		/* env */
+		else if (special_case == 1)
+		{
+			free(stdin_line);
+			free(line_tokens);
+			continue;
+		}
+
+		status = create_fork(argv[0], line_tokens, env, is_terminal);
+
+		free(stdin_line);
+		free(line_tokens);
+	}
+
+	return (EXIT_SUCCESS);
 }
 
