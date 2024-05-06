@@ -19,15 +19,15 @@
  */
 char **str_tokens(char *str)
 {
-	if (!str)
-		return (NULL);
-
 	int str_len;
 	int token_count = 0;
 	int token_index = 0;
 	int i;
 	char **result;
 	char *token;
+
+	if (!str)
+		return (NULL);
 
 	str_len =  _strlen(str);
 	for (i = 0; i < str_len; i++)
