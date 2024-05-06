@@ -1,19 +1,20 @@
 #include "shell.h"
 
 /**
- * str_tokens - Returns an array of pointers
- * to individual tokens in the 'str'
- * using "strtok(stdin_line, " \n")".
+ * str_tokens - Tokenizes a string into an array of
+ * pointers to individual tokens.
  *
- * The returned array is null poiinter-terminated.
- * It's also malloc'ed, and needs to be freed.
- * If it fails to malloc or if 'str is NULL,
- * str_tokens returns  NULL.
+ * @str: The string to tokenize.
  *
- * Return: NULL pointer-terminated array of
- * pointers to tokens in the 'str' string
- * if the malloc call was successful,
- * NULL otherwise
+ * This function tokenizes the input string 'str' using "strtok(str, " \n")".
+ * The returned array is null pointer-terminated and dynamically allocated.
+ * It needs to be freed by the caller.
+ * If the function fails to allocate memory or if 'str' is NULL,
+ * it returns NULL.
+ *
+ * Return: Pointer to a null pointer-terminated array of pointers to tokens
+ * in the input string 'str' if the memory allocation is successful,
+ * NULL otherwise.
  */
 char **str_tokens(char *str)
 {

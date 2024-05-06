@@ -11,6 +11,8 @@
 
 char **str_tokens(char *str);
 int create_fork(char *shell_name, char **tokens, char **env, int is_terminal);
+int execute_command(char **tokens,
+		char **env, int is_terminal, char *shell_name);
 int special_cases(char **tokens, char *shell_name, char **env);
 char *get_path(char **env);
 char *split_path(char *file_token, char *path);
