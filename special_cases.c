@@ -19,7 +19,9 @@ int special_cases(char **tokens, char *shell_name, char **env)
 		if (_strcmp(tokens[0], "exit") == 0)
 		{
 			if (!tokens[1])
+			{
 				return (0);
+			}
 			else
 			{
 				write(1, shell_name, _strlen(shell_name));

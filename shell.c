@@ -2,9 +2,19 @@
 #include <stdio.h>
 
 /**
- * main - Runs shell.
+ * main - Main driver for the shell.
+ * @argc: Argument count (unused in this function).
+ * @argv: Array containing the program name.
+ * @env: Array containing the environment variables.
  *
- * Return: (hopefully) 0
+ * This function reads and executes user-inputted commands.
+ * It reads the line entered by the user,
+ * tokenizes the line, checks for special cases
+ * (e.g., "exit" and "env" commands), and then creates
+ * a new process for the execution of the command.
+ * This process continues until the user enters the "exit" command.
+ *
+ * Return: EXIT_SUCCESS, if the driver terminates successfully.
  */
 int main(__attribute__((unused)) int argc, char **argv, char **env)
 {

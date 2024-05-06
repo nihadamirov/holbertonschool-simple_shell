@@ -4,6 +4,7 @@
  * str_tokens - Returns an array of pointers
  * to individual tokens in the 'str'
  * using "strtok(stdin_line, " \n")".
+ * @str: The string to be tokenized.
  *
  * The returned array is null poiinter-terminated.
  * It's also malloc'ed, and needs to be freed.
