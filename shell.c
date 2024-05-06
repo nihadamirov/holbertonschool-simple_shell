@@ -42,7 +42,7 @@ int handle_special_cases(char **tokens, char *shell_name, char **env)
 }
 
 /**
- * execute_command - Executes a command in a new process.
+ * ext_command - Executes a command in a new process.
  *
  * @shell_name: Name of the shell program.
  * @tokens: Array of tokens representing the command and its arguments.
@@ -50,8 +50,7 @@ int handle_special_cases(char **tokens, char *shell_name, char **env)
  * @is_terminal: Flag indicating if the shell is running in interactive mode.
  * Return: 1 if the shell should continue running, 0 otherwise.
  */
-int execute_command(char *shell_name,
-		char **tokens, char **env, int is_terminal)
+int ext_command(char *shell_name, char **tokens, char **env, int is_terminal)
 {
 	return (create_fork(shell_name, tokens, env, is_terminal));
 }
@@ -64,12 +63,13 @@ int execute_command(char *shell_name,
  * @env: Array of pointers to the environment variables.
  * Return: EXIT_SUCCESS upon successful execution.
  */
-int main(int argc, char **argv, char **env)
+int main(__attribute__((unused)) int argc, char **argv, char **env)
 {
 	int status = 1;
 	char *stdin_line;
 	char **line_tokens;
 	int special_case;
+	int is_terminal;
 
 	while (status)
 	{
@@ -100,7 +100,7 @@ int main(int argc, char **argv, char **env)
 		}
 
 		is_terminal = isatty(0);
-		status = execute_command(argv[0], line_tokens, env, is_terminal);
+		status = ext_command(argv[0], line_tokens, env, is_terminal);
 
 		free(stdin_line);
 		free(line_tokens);
