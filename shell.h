@@ -10,12 +10,7 @@
 #include <sys/wait.h>
 
 char **str_tokens(char *str);
-
 int create_fork(char *shell_name, char **tokens, char **env, int is_terminal);
-void handle_command_not_found(char *shell_name, char **tokens, int is_terminal);
-void execute_command(char **tokens, char **env);
-pid_t create_child_process(void);
-
 int special_cases(char **tokens, char *shell_name, char **env);
 char *get_path(char **env);
 char *split_path(char *file_token, char *path);
@@ -24,6 +19,4 @@ int _strcmp(char *a, char *b);
 int _strncmp(const char *s1, const char *s2, size_t n);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
-
 #endif
-
