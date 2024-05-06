@@ -14,35 +14,36 @@
  */
 int special_cases(char **tokens, char *shell_name, char **env)
 {
-	if (tokens[0])
-	{
-		if (_strcmp(tokens[0], "exit") == 0)
-		{
-			if (!tokens[1])
-				return (0);
-		} else
-		{
-			write(1, shell_name, _strlen(shell_name));
-			write(1, ": sh: 1: exit: Illegal number: ", 31);
-			write(1, tokens[1], _strlen(tokens[1]));
-			write(1, "\n", 1);
+    if (!tokens || !tokens[0])
+        return (2);
 
-			return (1);
-		}
-	}
-	if (_strcmp(tokens[0], "env") == 0)
-	{
-		int i = 0;
-		int str_len = 0;
+    if (_strcmp(tokens[0], "exit") == 0)
+    {
+        if (!tokens[1])
+            return (0);
+        else
+        {
+            write(1, shell_name, _strlen(shell_name));
+            write(1, ": exit: Illegal number: ", 24);
+            write(1, tokens[1], _strlen(tokens[1]));
+            write(1, "\n", 1);
+            return (1);
+        }
+    }
+    else if (_strcmp(tokens[0], "env") == 0)
+    {
+        int i = 0;
+        int str_len = 0;
 
-		while (env[i])
-		{
-			str_len = _strlen(env[i]);
-			write(1, env[i], str_len);
-			write(1, "\n", 1);
-			i++;
-		}
-		return (1);
-	}
-	return (2);
+        while (env[i])
+        {
+            str_len = _strlen(env[i]);
+            write(1, env[i], str_len);
+            write(1, "\n", 1);
+            i++;
+        }
+        return (1);
+    }
+    return (2);
 }
+

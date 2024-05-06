@@ -18,33 +18,29 @@
  */
 char **str_tokens(char *str)
 {
-	char **result;
-	char *token;
-	/*
-	 * malloc token pointer array with the same length
-	 * as 'str' to ensure an overflow doesn't happen:
-	 */
-	int str_len;
-	int result_index = 0;
+    char **result;
+    char *token;
+    int str_len;
+    int result_index = 0;
 
-	if (!str)
-		return (NULL);
+    if (!str)
+        return (NULL);
 
-	str_len = _strlen(str);
+    str_len = _strlen(str);
 
-	result = malloc(sizeof(char *) * (str_len + 1));
-	if (!result)
-		return (NULL);
+    result = malloc(sizeof(char *) * (str_len + 1));
+    if (!result)
+        return (NULL);
 
-	token = strtok(str, " \n");
-	while (token)
-	{
-		result[result_index] = token;
-		result_index++;
-		token = strtok(NULL, " \n");
-	}
-	result[result_index] = NULL;
+    token = strtok(str, " \n");
+    while (token)
+    {
+        result[result_index] = token;
+        result_index++;
+        token = strtok(NULL, " \n");
+    }
+    result[result_index] = NULL;
 
-	return (result);
+    return (result);
 }
 
