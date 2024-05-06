@@ -19,6 +19,8 @@ int main(__attribute__((unused)) int argc, char **argv, char **env)
 {
 	size_t buffsize = 100;
 	char *stdin_line = NULL;
+	int special_case;
+	int status;
 
 	while (1)
 	{
@@ -35,14 +37,14 @@ int main(__attribute__((unused)) int argc, char **argv, char **env)
 		if (!line_tokens)
 			break;
 
-		int special_case = special_cases(line_tokens, argv[0], env);
+		special_case = special_cases(line_tokens, argv[0], env);
 
 		if (special_case == 0)
 			break;
 		else if (special_case == 1)
 			continue;
 
-		int status = create_fork(argv[0], line_tokens, env, is_terminal);
+		status = create_fork(argv[0], line_tokens, env, is_terminal);
 
 		if (status != 1)
 			break;
