@@ -2,6 +2,44 @@
 #include <stdio.h>
 
 /**
+ * main - Main driver for the shell.
+ * @argc: Argument count (unused in this function).
+ * @argv: Array containing the program name.
+ * @env: Array containing the environment variables.
+ *
+ * This function reads and executes user-inputted commands.
+ * It reads a line from the standard input, tokenizes the line,
+ * handles special cases, and then creates a new process
+ * for the execution of the command.
+ * This process continues until the user enters the "exit" command.
+ *
+ * Return: EXIT_SUCCESS, if the driver terminates successfully.
+ */
+int main(__attribute__((unused)) int argc, char **argv, char **env)
+{
+	int status = 1;
+	size_t buffsize = 100;
+	char *stdin_line;
+	char **line_tokens;
+	int is_terminal = isatty(0);
+
+	while (status)
+	{
+		if (is_terminal)
+			write(1, "$ ", 2);
+
+		read_line(&stdin_line, &buffsize);
+		line_tokens = tokenize_line(stdin_line);
+		handle_special_cases(line_tokens, argv[0], env);
+		status = create_fork(argv[0], line_tokens, env, is_terminal);
+
+		free(stdin_line);
+		free(line_tokens);
+	}
+	return (EXIT_SUCCESS);
+}
+
+/**
  * read_line - Reads a line from the standard input.
  * @stdin_line: Pointer to the line read from the standard input.
  * @buffsize: Pointer to the size of the buffer.
@@ -69,42 +107,3 @@ int handle_special_cases(char **line_tokens, char *shell_name, char **env)
 	}
 	return (special_case);
 }
-
-/**
- * main - Main driver for the shell.
- * @argc: Argument count (unused in this function).
- * @argv: Array containing the program name.
- * @env: Array containing the environment variables.
- *
- * This function reads and executes user-inputted commands.
- * It reads a line from the standard input, tokenizes the line,
- * handles special cases, and then creates a new process
- * for the execution of the command.
- * This process continues until the user enters the "exit" command.
- *
- * Return: EXIT_SUCCESS, if the driver terminates successfully.
- */
-int main(__attribute__((unused)) int argc, char **argv, char **env)
-{
-	int status = 1;
-	size_t buffsize = 100;
-	char *stdin_line;
-	char **line_tokens;
-	int is_terminal = isatty(0);
-
-	while (status)
-	{
-		if (is_terminal)
-			write(1, "$ ", 2);
-
-		read_line(&stdin_line, &buffsize);
-		line_tokens = tokenize_line(stdin_line);
-		handle_special_cases(line_tokens, argv[0], env);
-		status = create_fork(argv[0], line_tokens, env, is_terminal);
-
-		free(stdin_line);
-		free(line_tokens);
-	}
-	return (EXIT_SUCCESS);
-}
-
