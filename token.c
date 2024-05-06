@@ -19,23 +19,34 @@
  */
 char **str_tokens(char *str)
 {
-	char **result;
-	char *token;
-	int result_index = 0;
-
 	if (!str)
 		return (NULL);
 
-	result = malloc(sizeof(char *) * (strlen(str) + 1));
+	int str_len = _strlen(str);
+	int token_count = 0;
+	int token_index = 0;
+	int i;
+	char **result;
+	char *token;
+
+	for (i = 0; i < str_len; i++)
+	{
+		if (str[i] == ' ' || str[i] == '\n')
+			token_count++;
+	}
+
+	result = malloc(sizeof(char *) * (token_count + 1));
 	if (!result)
 		return (NULL);
 
-	while ((token = strsep(&str, " \n")) != NULL)
+	token = strtok(str, " \n");
+	while (token)
 	{
-		result[result_index++] = token;
+		result[token_index++] = token;
+		token = strtok(NULL, " \n");
 	}
-
-	result[result_index] = NULL;
+	result[token_index] = NULL;
 
 	return (result);
 }
+
