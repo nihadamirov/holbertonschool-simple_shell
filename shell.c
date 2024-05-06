@@ -17,39 +17,49 @@
  */
 int main(__attribute__((unused)) int argc, char **argv, char **env)
 {
-	size_t buffsize = 100;
+	int status = 1;
 	char *stdin_line = NULL;
+        size_t buffsize = 0;
+        int is_terminal = isatty(0);
+	ssize_t bytes_read;
+	char **line_tokens;
 	int special_case;
-	int status;
 
-	while (1)
+	while (status)
 	{
-		char **line_tokens = NULL;
-		int is_terminal = isatty(0);
 
-		if (is_terminal)
-			write(1, "$ ", 2);
+        if (is_terminal)
+            write(1, "$ ", 2);
 
-		if (getline(&stdin_line, &buffsize, stdin) == -1)
-			break;
+        bytes_read = getline(&stdin_line, &buffsize, stdin);
 
-		line_tokens = str_tokens(stdin_line);
-		if (!line_tokens)
-			break;
+        if (bytes_read == -1)
+        {
+            free(stdin_line);
+            break;
+        }
 
-		special_case = special_cases(line_tokens, argv[0], env);
+        line_tokens = str_tokens(stdin_line);
+        if (!line_tokens)
+        {
+            free(stdin_line);
+            break;
+        }
 
-		if (special_case == 0)
-			break;
-		else if (special_case == 1)
-			continue;
+        special_case = special_cases(line_tokens, argv[0], env);
 
-		status = create_fork(argv[0], line_tokens, env, is_terminal);
+        free(stdin_line);
+        free(line_tokens);
 
-		if (status != 1)
-			break;
+        if (special_case == 0)
+            return (EXIT_SUCCESS);
+
+        if (special_case == 1)
+            continue;
+
+        status = create_fork(argv[0], line_tokens, env, is_terminal);
 	}
 
-	free(stdin_line);
-	return (EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
 }
+
