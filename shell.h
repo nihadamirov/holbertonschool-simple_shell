@@ -12,8 +12,7 @@
 char **str_tokens(char *str);
 
 int create_fork(char *shell_name, char **tokens, char **env, int is_terminal);
-void handle_command_not_found
-(char *shell_name, char **tokens, int is_terminal);
+void handle_command_not_found(char *shell_name, char **tokens, int is_terminal);
 void execute_command(char **tokens, char **env);
 pid_t create_child_process(void);
 
@@ -31,3 +30,4 @@ char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
 
 #endif
+
