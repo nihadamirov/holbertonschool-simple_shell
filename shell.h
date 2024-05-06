@@ -16,10 +16,6 @@ void handle_command_not_found(char *shell_name, char **tokens, int is_terminal);
 void execute_command(char **tokens, char **env);
 pid_t create_child_process(void);
 
-void read_line(char **stdin_line, size_t *buffsize);
-char **tokenize_line(char *stdin_line);
-int handle_special_cases(char **line_tokens, char *shell_name, char **env);
-
 int special_cases(char **tokens, char *shell_name, char **env);
 char *get_path(char **env);
 char *split_path(char *file_token, char *path);
