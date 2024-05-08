@@ -1,83 +1,66 @@
 #include "shell.h"
 
 /**
- * get_path - get PATH string in the env
- * @env: environment list with variables
- * Return: pointer to string with all directories
- * in 'PATH' string
- */
-char *get_path(char **env)
+  * find_path - find path in env variables
+  * @var: env variable
+  * @i: row index
+  * @j: column index
+  */
+void find_path(char **var, int *i, int *j)
 {
-	int i;
-	char *path = NULL;
-
-	if (!env)
-		return (NULL);
-
-	for (i = 0; env[i]; i++)
+	while (var[*i])
 	{
-		if (_strncmp(env[i], "PATH=", 5) == 0)
+		while (var[*i][*j])
 		{
-			path = env[i];
-			break;
+			if (var[*i][*j] == PATH[*j])
+			{
+				if (var[*i][*j] == '=')
+					return;
+				(*j)++;
+			}
+			else
+				break;
 		}
+		(*i)++;
+		*j = 0;
 	}
-
-	if (path == NULL)
-		return (NULL);
-
-	path = strtok(path, "=");
-
-	if (path)
-		path = strtok(NULL, "=");
-
-	return (path);
+	*i = 0;
+	*j = 0;
 }
-
 /**
- * split_path - Get the full path to the file naned
- * 'file_token' if it's in PATH, NULL otherwise
- *
- * THE RETURNED STRING MUST BE FREED!!!!
- *
- * @file_token: name of executable to find in path
- * @path: string containing all directories in PATH
- *
- * Return: full path to file 'file_token' if found
- * in PATH, NULL otherwise
- */
-char *split_path(char *file_token, char *path)
+  * get_path - init path array
+  * @env: environment variables array pointer
+  * Return: path array
+  */
+char **get_path(char **env)
 {
-	struct stat st;
-	char *dir;
+	int i = 0, j = 0;
+	char **array;
 
-	if (path == NULL)
-		return (NULL);
-
-	dir = strtok(path, ":");
-
-	while (dir)
+	find_path(env, &i, &j);
+	if (i == 0 && j == 0)
 	{
-		int dir_len = _strlen(dir);
-		int file_token_len = _strlen(file_token);
-
-		/* 1 char for slash, 1 char for terminating null byte */
-		char *full_file_name = malloc(sizeof(char) * (dir_len + 2 + file_token_len));
-
-		if (!full_file_name)
-			return (NULL);
-
-		_strcpy(full_file_name, dir);
-		_strcat(full_file_name, "/");
-		_strcat(full_file_name, file_token);
-
-		if (stat(full_file_name, &st) == 0)
-			return (full_file_name);
-
-		dir = strtok(NULL, ":");
-		free(full_file_name);
+		return (NULL);
 	}
-
-	return (NULL);
+	j++;
+	array = _strtok(env[i] + j, ':');
+	if (!array)
+	{
+		free(array);
+		return (NULL);
+	}
+	return (array);
 }
+/**
+ * free_path - free path buffer
+ */
+void free_path(void)
+{
+	int i = 0;
 
+	if (!path_var)
+		return;
+	while (path_var[i])
+		free(path_var[i++]);
+	free(path_var);
+}
