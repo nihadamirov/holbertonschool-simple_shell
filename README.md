@@ -4,7 +4,7 @@
 
 The objective of this project is for you to create a simple [shell](https://en.wikipedia.org/wiki/Unix_shell).
 
-Through the `0-shell` you will get to the core of the `Unix` system and explore an important part of this system’s API which is the process creation and synchronization.
+Through the `Simple Shell` you will get to the core of the `Unix` system and explore an important part of this system’s API which is the process creation and synchronization.
 Executing a command inside a shell implies creating a new process, which execution and final state will be monitored by its parents processes. This set of functions will be the key to success for your project.
 
 For this project you will only have to create a simple `Unix shell` where you can run some of the most known commands. For this part of the project, no advanced functions, pipes or redirection will be asked, but you can add them if you like.
